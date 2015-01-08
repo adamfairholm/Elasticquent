@@ -134,6 +134,23 @@ protected $mappingProperties = array(
 );
 ```
 
+For more advanced use cases you can also use dynamic templates by setting the `dynamicTemplates` property of the model. Example:
+
+```php
+protected $dynamicTemplates = array(
+    array(
+        'dont_analyze' => array(
+            'match' => '*',
+            'match_mapping_type' => 'string',
+            'mapping' => array(
+                'type' => 'string',
+                'index' => 'not_analyzed',
+            ),
+        ),
+    ),
+);
+```
+
 If you'd like to setup a model's type mapping based on your mapping properties, you can use:
 
     Book::putMapping($ignoreConflicts = true);
