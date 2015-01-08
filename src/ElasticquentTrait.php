@@ -154,6 +154,26 @@ trait ElasticquentTrait
     }
 
     /**
+     * Get Dynamic Templates
+     * 
+     * @return array
+     */
+    public function getDynamicTemplates()
+    {
+        return (array) $this->dynamicTemplates;
+    }
+
+    /**
+     * Set Dynamic Templates
+     * 
+     * @param array $templates
+     */
+    public function setDynamicTemplates(array $templates)
+    {
+        $this->dynamicTemplates = $templates;
+    }
+
+    /**
      * Is Elasticsearch Document
      *
      * Is the data in this module sourced
@@ -426,8 +446,9 @@ trait ElasticquentTrait
         $mapping = $instance->getBasicEsParams();
 
         $params = array(
-            '_source'       => array('enabled' => true),
-            'properties'    => $instance->getMappingProperties()
+            '_source'           => array('enabled' => true),
+            'properties'        => $instance->getMappingProperties(),
+            'dynamic_templates' => $instance->getDynamicTemplates(),
         );
 
         $mapping['body'][$instance->getTypeName()] = $params;
