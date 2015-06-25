@@ -1,6 +1,6 @@
 <?php namespace Elasticquent;
 
-use Illuminate\Pagination\LengthAwarePaginator as Paginator;
+use Elasticquent\ElasticquentPaginator as Paginator;
 
 class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collection
 {
@@ -134,7 +134,7 @@ class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collect
     {
         $page = Paginator::resolveCurrentPage() ?: 1;
         $sliced_items = array_slice($this->items, ($page - 1) * $pageLimit, $pageLimit);
-        return new Paginator($sliced_items, $this->totalHits(), $pageLimit, $page, ['path' => Paginator::resolveCurrentPath()]);
+        return new Paginator($sliced_items, $this->hits, $this->totalHits(), $pageLimit, $page, ['path' => Paginator::resolveCurrentPath()]);
     }
 
 }
