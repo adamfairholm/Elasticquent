@@ -255,10 +255,18 @@ trait ElasticquentTrait
             $params['body']['query'] = $query;
         }
 
+        $params['body']['highlight']['require_field_match'] = true;
+        $params['body']['highlight']['fields'] = [
+            '*' => [
+                'type' => 'plain',
+                'number_of_fragments' => 0
+            ]
+        ];
+
         if ($aggregations) {
             $params['body']['aggs'] = $aggregations;
         }
-        
+
         if ($sort) {
             $params['body']['sort'] = $sort;
         }
