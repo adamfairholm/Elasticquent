@@ -241,34 +241,16 @@ trait ElasticquentTrait
      * @param   int $offset
      * @return  ResultCollection
      */
-    public static function searchByQuery($query = null, $aggregations = null, $sourceFields = null, $limit = null, $offset = null, $sort = null)
+    public static function searchByQuery($query = null, $limit = null, $offset = null)
     {
         $instance = new static;
 
         $params = $instance->getBasicEsParams(true, true, true, $limit, $offset);
 
-        if ($sourceFields) {
-            $params['body']['_source']['include'] = $sourceFields;
-        }
-
         if ($query) {
-            $params['body']['query'] = $query;
-        }
-
-        $params['body']['highlight']['require_field_match'] = true;
-        $params['body']['highlight']['fields'] = [
-            '*' => [
-                'type' => 'plain',
-                'number_of_fragments' => 0
-            ]
-        ];
-
-        if ($aggregations) {
-            $params['body']['aggs'] = $aggregations;
-        }
-
-        if ($sort) {
-            $params['body']['sort'] = $sort;
+            $params['body'] = $query;
+        } else {
+            $params['body']['query'] = ['match_all' => []];
         }
 
         $result = $instance->getElasticSearchClient()->search($params);
