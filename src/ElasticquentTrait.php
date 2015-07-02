@@ -186,7 +186,7 @@ trait ElasticquentTrait
         return $this->documentVersion;
     }
 
-    /**
+     /**
      * Get Index Document Data
      *
      * Get the data that Elasticsearch will
@@ -197,6 +197,10 @@ trait ElasticquentTrait
     public function getIndexDocumentData()
     {
         return $this->toArray();
+    }
+
+    public function excludeIndexDocumentData() {
+        return [];
     }
 
     /**
@@ -293,8 +297,17 @@ trait ElasticquentTrait
 
         $params = $this->getBasicEsParams();
 
+        $includeFields = $this->getIndexDocumentData();
+        $excludeFields = $this->excludeIndexDocumentData();
+
+        foreach ($excludeFields as $value) {
+            if (array_key_exists($value, $includeFields)){
+                unset($includeFields[$value]);
+            }
+        }
+
         // Get our document body data.
-        $params['body'] = $this->getIndexDocumentData();
+        $params['body'] = $includeFields;
 
         // The id for the document must always mirror the
         // key for this model, even if it is set to something
